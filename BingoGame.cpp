@@ -56,15 +56,26 @@ int main()
 
 		if (i == j)
 			continue;
-
 		int iTemp = iBingo[i];
 		iBingo[i] = iBingo[j];
 		iBingo[j] = iTemp;
 
+		//컴퓨터 섞기 
+		int a = rand() % (i + 1);
+		if (i == a)
+			continue;
+
+		iTemp = iComputer[i];
+		iComputer[i] = iComputer[a];
+		iComputer[a] = iTemp;
+
 		//섞는거 출력 이쁘게. 
 
+		Sleep(100);
+		system("cls");
+
 		cout << endl << endl;
-		cout << "\t    __________________ BINGO ________________" << endl << endl;
+		cout << "\t    __________________ BINGO ________________" << "\t\t" << "    __________________ COMPU ________________" << endl << endl;
 		for (int k = 0; k < P_SIZE; k++)
 		{
 			cout << "\t\t";
@@ -78,44 +89,23 @@ int main()
 				cout << iBingo[k * 5 + e] << "\t";
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			}
-			cout << endl << endl << endl;
-		}
-		cout << "\t    __________________________________________" << endl << endl;
 
-		cout << endl << endl;
 
-		//컴퓨터 섞기 
-
-		j = rand() % (i + 1);
-
-		if (i == j)
-			continue;
-
-		iTemp = iComputer[i];
-		iComputer[i] = iComputer[j];
-		iComputer[j] = iTemp;
-
-		cout << endl << endl;
-		cout << "\t    __________________ COMPU ________________" << endl << endl;
-		for (int k = 0; k < P_SIZE; k++)
-		{
 			cout << "\t\t";
-			for (int e = 0; e < P_SIZE; e++)
+
+			for (int c = 0; c < P_SIZE; c++)
 			{
-				if (i == (k * 5 + e) || j == (k * 5 + e))
+				if (i == (k * 5 + c) || a == (k * 5 + c))
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); //빨강
 				else
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 
-				cout << iComputer[k * 5 + e] << "\t";
+				cout << iComputer[k * 5 + c] << "\t";
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			}
 			cout << endl << endl << endl;
 		}
-		cout << "\t    __________________________________________" << endl << endl;
-		cout << endl << endl;
-		Sleep(100);
-		system("cls");
+		cout << "\t    __________________________________________" << "\t\t" << "    __________________________________________" << endl;
 
 	}
 
@@ -131,11 +121,13 @@ int main()
 		system("cls");
 
 		//빙고 줄이 현재 몇 줄인지 체크해서 화면에 보여준다.
-		cout << "현재 빙고 수 : " << C_Bingo << endl;
+		cout << endl;
+		cout << "\t현재 빙고 수 : " << C_Bingo << "\t\t" << "\t\t\t\t 컴퓨터 현재 빙고 수 : " << C_Computer << endl;
+		cout << "\t\t\t\t\t\t\t\t\t 컴퓨터가 입력했던 수  : " << Cinput + 1 << endl;
 
 
-		cout << endl << endl;
-		cout << "\t    __________________ BINGO ________________" << endl << endl;
+		cout << endl;
+		cout << "\t    __________________ BINGO ________________" << "\t\t" << "    __________________ COMPU ________________" << endl << endl;
 		for (int i = 0; i < P_SIZE; i++)
 		{
 			cout << "\t\t";
@@ -149,23 +141,8 @@ int main()
 				}
 				else
 					cout << iBingo[i * 5 + j] << "\t";
+
 			}
-			cout << endl << endl << endl;
-		}
-		cout << "\t    __________________________________________" << endl;
-
-
-		//컴퓨터 빙고 출력 
-		cout << "\t    __________________________________________" << endl;
-		cout << endl << endl;
-		cout << "컴퓨터 현재 빙고 수 : " << C_Computer << endl;
-		cout << "컴퓨터가 입력했던 수  : " << Cinput + 1 << endl;
-
-
-		cout << endl << endl;
-		cout << "\t    __________________ COMPU ________________" << endl << endl;
-		for (int i = 0; i < P_SIZE; i++)
-		{
 			cout << "\t\t";
 			for (int j = 0; j < P_SIZE; j++)
 			{
@@ -177,10 +154,12 @@ int main()
 				}
 				else
 					cout << iComputer[i * 5 + j] << "\t";
+
 			}
 			cout << endl << endl << endl;
 		}
-		cout << "\t    __________________________________________" << endl << endl;
+		cout << "\t    __________________________________________" << "\t\t" << "    __________________________________________" << endl;
+
 
 		//5줄 이상일 경우 게임을 종료한다.
 		if (C_Bingo >= 5 || C_Computer >= 5)
@@ -198,9 +177,16 @@ int main()
 		//플레이어는 숫자를 입력한다. 1 ~ 25 사이의 숫자를 입력받아야 한다.
 			//입력한 숫자에서 -1 해서 판단한다. 
 
+		cout << endl;
 		cout << "숫자를 선택해주세요!( 1 ~ " << P_SIZE * P_SIZE << " 까지) : " << endl;
 		cin >> input;
 		input--;
+
+
+		////테스트 
+		//for (int i = 0; i < P_SIZE * P_SIZE; i++)
+		//	cout << "[" << i << "] " << iComputerCheck[STATE][i] << endl;
+
 
 		if (cin.fail() || input < -1 || input >(P_SIZE * P_SIZE - 1))
 		{
@@ -218,7 +204,6 @@ int main()
 			break;
 		}
 
-
 		//숫자 목록 중 숫자를 찾아서 *로 만들어준다.
 		if (iCheck[VALUE][input])
 		{
@@ -227,22 +212,9 @@ int main()
 			continue;
 		}
 
-		//컴퓨터 턴 실행 
 
-		while (true) {
-			Cinput = rand() % (P_SIZE * P_SIZE);
-
-			if (iComputerCheck[VALUE][Cinput] || input == Cinput)
-				continue;
-			else
-				break;
-		}
-		//두개 다 * 표시하기.  Player
 		iCheck[VALUE][input] = true; //이 숫자는 사용중입니다! 
-		iCheck[VALUE][Cinput] = true;
-
 		iComputerCheck[VALUE][input] = true;
-		iComputerCheck[VALUE][Cinput] = true;
 
 		// 숫자 위치 찾기 
 		for (int i = 0; i < P_SIZE * P_SIZE; i++)
@@ -250,24 +222,137 @@ int main()
 			if (iBingo[i] == (input + 1))
 				iCheck[STATE][i] = true; // 이 위치는 * 상태입니다!
 
-			if (iBingo[i] == (Cinput + 1))
-				iCheck[STATE][i] = true;
-
 			if (iComputer[i] == (input + 1))
 				iComputerCheck[STATE][i] = true; // 이 위치는 * 상태입니다!
+
+		}
+
+
+		//컴퓨터 턴 실행 
+		if (Level == EASY)
+		{
+			while (true) {
+				Cinput = rand() % (P_SIZE * P_SIZE);
+
+				if (iComputerCheck[VALUE][Cinput] || input == Cinput)
+					continue;
+				else
+					break;
+			}
+		}
+		else if (Level == HARD) // ,HARd!!
+		{
+			//여기에 가장 적절한 부분을 찾는 로직을 넣어서 Cinput으로 만들어주기. 그러면 됌. 
+			//별 갯수 확인하기. 
+
+			int HardModeRogic[P_SIZE * 2 + 2]{ 0 };
+
+			for (int i = 0; i < P_SIZE; i++)
+			{
+				for (int j = 0; j < P_SIZE; j++)
+				{
+					// 가로줄
+					if (iComputerCheck[STATE][i * P_SIZE + j]) HardModeRogic[i]++;  // 0 1 2 3 4 에저장
+					// 세로줄 
+					if (iComputerCheck[STATE][i + j * P_SIZE])  HardModeRogic[P_SIZE + i]++; //  5 6 7 8 9 에 저장 
+
+				}
+				// 대각선 
+				if (iComputerCheck[STATE][(P_SIZE * i) + i]) HardModeRogic[P_SIZE * 2]++; //10
+				if (iComputerCheck[STATE][(P_SIZE * i) + (P_SIZE - i - 1)])  HardModeRogic[P_SIZE * 2 + 1]++; //11
+
+			}
+
+			//가장 큰 별 갯수줄의 위치 확인하기. (빙고는아닌.) 
+			int Maxdax{ 0 };
+
+			while (!(HardModeRogic[Maxdax] < P_SIZE)) {
+				Maxdax = rand() % P_SIZE * 2 + 2;
+			}
+
+			for (int i = 1; i < P_SIZE * 2 + 2; i++) { //0부터 들어감
+				if (HardModeRogic[i] > HardModeRogic[Maxdax] && HardModeRogic[i] < P_SIZE)
+					Maxdax = i;
+			}
+
+			//거기서 하나 선택하기. cinput, 가장 유력한곳 은 HardModeRogic[Maxdax]가 가리키는 위치의 줄.
+			switch (Maxdax / P_SIZE)
+			{
+			case 0:
+				//가로줄임
+				for (int i = 0; i < P_SIZE; i++)
+				{
+					if (!iComputerCheck[STATE][(Maxdax % P_SIZE) * P_SIZE + i]) //적절한 위치를 선정 후, 거기 값cinput으로 받아옴. 1~ 이므로 --; 
+					{
+						Cinput = iComputer[(Maxdax % P_SIZE) * P_SIZE + i];
+						if ((Cinput - 1) != input)
+							break;
+					}
+				}
+				break;
+			case 1:
+				//새로줄임
+				for (int i = 0; i < P_SIZE; i++)
+				{
+					if (!iComputerCheck[STATE][(Maxdax % P_SIZE) + i * P_SIZE])
+					{
+						Cinput = iComputer[(Maxdax % P_SIZE) + i * P_SIZE];
+
+						if ((Cinput - 1) != input)
+							break;
+					}
+				}
+				break;
+			case 2:
+				//대각선임
+
+				for (int i = 0; i < P_SIZE; i++)
+				{
+					if (Maxdax == P_SIZE * 2) //10
+					{
+						if (!iComputerCheck[STATE][(P_SIZE * i) + i])
+						{
+							Cinput = iComputer[(P_SIZE * i) + i];
+
+							if ((Cinput - 1) != input)
+								break;
+						}
+					}
+					else if (Maxdax == P_SIZE * 2 + 1)//11
+					{
+						if (!iComputerCheck[STATE][(P_SIZE * i) + (P_SIZE - i - 1)])
+						{
+							Cinput = iComputer[(P_SIZE * i) + (P_SIZE - i - 1)];
+
+							if ((Cinput - 1) != input)
+								break;
+						}
+					}
+				}
+				break;
+			}
+			Cinput--;
+		}
+
+
+		//두개 다 * 표시하기.  Player
+
+		iCheck[VALUE][Cinput] = true;
+		iComputerCheck[VALUE][Cinput] = true;
+
+		// 숫자 위치 찾기 
+		for (int i = 0; i < P_SIZE * P_SIZE; i++)
+		{
+			if (iBingo[i] == (Cinput + 1))
+				iCheck[STATE][i] = true;
 
 			if (iComputer[i] == (Cinput + 1))
 				iComputerCheck[STATE][i] = true;
 		}
 
 
-
-
-
-
 		//숫자를 *로 만든 후에 빙고 줄 수를 체크한다.
 		//5 * 5이기 때문에 가로 5줄 세로 5줄 대각선 2줄이 나올 수 있다.
-
 
 		C_Depth[0] = C_Depth[1] = C_cDepth[0] = C_cDepth[1] = true;
 		C_Bingo = C_Computer = 0;
@@ -311,6 +396,7 @@ int main()
 		if (C_Depth[1]) C_Bingo++;
 		if (C_cDepth[0]) C_Computer++;
 		if (C_cDepth[1]) C_Computer++;
+
 
 	}
 	return 0;
